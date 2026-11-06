@@ -3,154 +3,177 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Nhịp Vận Khí & Radar Túi Tiền v4.0</title>
+  <title>Khí Tiết & Vận Thời</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --surface-2: #273549;
-      --border: #334155;
-      --text: #f8fafc;
-      --text-sub: #94a3b8;
-      --emerald: #10b981;
-      --emerald-bg: rgba(16, 185, 129, 0.14);
-      --sky: #38bdf8;
-      --sky-bg: rgba(56, 189, 248, 0.14);
-      --amber: #f59e0b;
-      --amber-bg: rgba(245, 158, 11, 0.14);
-      --rose: #f43f5e;
-      --rose-bg: rgba(244, 63, 94, 0.14);
-      --purple: #a855f7;
-      --purple-bg: rgba(168, 85, 247, 0.14);
+      --bg: #f7f4ed;
+      --card-bg: #ffffff;
+      --card-sub: #faf8f5;
+      --border: #ede7dc;
+      --border-focus: #c5b69c;
+      
+      --text: #2c2825;
+      --text-sub: #6e675f;
+      --text-muted: #9c9388;
+      
+      --zen-green: #2d7a4d;
+      --zen-green-bg: #eaf5ee;
+      --zen-green-border: #bce3cb;
+      
+      --zen-gold: #b47a16;
+      --zen-gold-bg: #fdf6e7;
+      --zen-gold-border: #f4ddaf;
+      
+      --zen-blue: #1d7293;
+      --zen-blue-bg: #ebf5fa;
+      --zen-blue-border: #c4e4f2;
+      
+      --zen-red: #ba384c;
+      --zen-red-bg: #fcedf0;
+      --zen-red-border: #f4c2cb;
+
+      --shadow: 0 4px 18px rgba(92, 79, 63, 0.05);
+      --shadow-hover: 0 8px 24px rgba(92, 79, 63, 0.09);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background: var(--bg); color: var(--text); padding: 14px; font-size: 14px; line-height: 1.5; max-width: 540px; margin: 0 auto; padding-bottom: 48px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Quicksand', -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); color: var(--text); padding: 16px; font-size: 14.5px; line-height: 1.6; max-width: 520px; margin: 0 auto; padding-bottom: 60px; }
 
-    /* Header & Filter */
-    .header-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px; margin-bottom: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-    .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .app-name { font-size: 1.02rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .dot-live { width: 8px; height: 8px; border-radius: 50%; background: var(--emerald); box-shadow: 0 0 8px var(--emerald); }
-    .btn-settings { background: var(--surface-2); border: 1px solid var(--border); color: var(--text-sub); font-size: 0.75rem; padding: 5px 10px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    /* Top Bar */
+    .top-bar { background: var(--card-bg); border: 1px solid var(--border); border-radius: 22px; padding: 16px; margin-bottom: 16px; box-shadow: var(--shadow); }
+    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .brand-title { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 600; color: #3f362e; display: flex; align-items: center; gap: 8px; }
+    .brand-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--zen-green); box-shadow: 0 0 10px rgba(45, 122, 77, 0.4); }
+    .btn-cfg { background: var(--card-sub); border: 1px solid var(--border); color: var(--text-sub); font-size: 0.78rem; padding: 6px 12px; border-radius: 12px; font-weight: 600; cursor: pointer; }
 
-    .settings-drawer { display: none; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 10px; margin-top: 10px; border-top: 1px dashed var(--border); }
-    .settings-drawer.open { display: grid; }
-    .input-group label { display: block; font-size: 0.72rem; color: var(--text-sub); margin-bottom: 4px; }
-    .input-group input, .input-group select { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 8px 10px; border-radius: 10px; font-size: 0.85rem; }
+    .cfg-panel { display: none; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 12px; margin-top: 12px; border-top: 1px dashed var(--border); }
+    .cfg-panel.open { display: grid; }
+    .field-wrap label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
+    .field-wrap input, .field-wrap select { width: 100%; background: var(--card-sub); border: 1px solid var(--border); color: var(--text); padding: 9px 11px; border-radius: 12px; font-size: 0.88rem; font-weight: 600; }
 
-    .date-controls { display: flex; gap: 8px; align-items: center; }
-    .date-controls input { flex: 1; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 9px 12px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; }
-    .btn-nav { background: var(--surface-2); border: 1px solid var(--border); color: var(--text); padding: 9px 12px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.85rem; }
-    .btn-today { background: var(--sky); color: #0f172a; border: none; padding: 9px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+    .date-nav-row { display: flex; gap: 8px; align-items: center; }
+    .date-nav-row input { flex: 1; background: var(--card-sub); border: 1px solid var(--border); color: var(--text); padding: 9px 12px; border-radius: 14px; font-size: 0.95rem; font-weight: 700; text-align: center; }
+    .nav-btn { background: var(--card-sub); border: 1px solid var(--border); color: var(--text); padding: 9px 13px; border-radius: 14px; font-weight: 700; cursor: pointer; }
+    .nav-btn-today { background: #3f362e; color: #fff; border: none; padding: 9px 16px; border-radius: 14px; font-weight: 600; cursor: pointer; }
 
-    /* Day Summary Card */
-    .day-overview { background: linear-gradient(145deg, #1e293b 0%, #172033 100%); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
-    .badge-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
-    .lunar-badge { display: inline-block; background: var(--surface-2); color: var(--sky); font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(56,189,248,0.25); }
-    .kv-badge { display: inline-block; background: var(--amber-bg); color: var(--amber); font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(245,158,11,0.25); }
+    /* Day Overview Card */
+    .day-banner { background: #ffffff; border: 1px solid var(--border); border-radius: 22px; padding: 18px; margin-bottom: 18px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+    .day-banner::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #c7a76c, #89a387, #85b0bf); }
+    
+    .badge-capsules { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .zen-pill { background: var(--card-sub); color: var(--text-sub); border: 1px solid var(--border); font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
+    .zen-pill-hl { background: var(--zen-gold-bg); color: var(--zen-gold); border-color: var(--zen-gold-border); }
 
-    .day-headline { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
-    .day-desc { font-size: 0.84rem; color: var(--text-sub); margin-bottom: 14px; }
+    .day-maintitle { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 600; color: #2c2520; margin-bottom: 6px; }
+    .day-maindesc { font-size: 0.88rem; color: var(--text-sub); line-height: 1.55; margin-bottom: 16px; }
 
-    .highlight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .hl-box { background: rgba(15, 23, 42, 0.65); border: 1px solid var(--border); border-radius: 12px; padding: 10px 11px; cursor: pointer; transition: transform 0.15s; }
-    .hl-box:active { transform: scale(0.98); }
-    .hl-box.best { border-left: 3px solid var(--emerald); }
-    .hl-box.caution { border-left: 3px solid var(--rose); }
-    .hl-box.spend { border-left: 3px solid var(--sky); }
-    .hl-box.lock { border-left: 3px solid var(--amber); }
-    .hl-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 2px; }
-    .hl-time { font-size: 0.88rem; font-weight: 700; color: #fff; }
-    .hl-note { font-size: 0.72rem; color: var(--text-sub); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .summary-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .zen-tile { background: var(--card-sub); border: 1px solid var(--border); border-radius: 16px; padding: 12px 14px; cursor: pointer; transition: all 0.2s; }
+    .zen-tile:active { transform: scale(0.98); }
+    .zen-tile.t-green { border-left: 4px solid var(--zen-green); }
+    .zen-tile.t-red { border-left: 4px solid var(--zen-red); }
+    .zen-tile.t-blue { border-left: 4px solid var(--zen-blue); }
+    .zen-tile.t-gold { border-left: 4px solid var(--zen-gold); }
+    
+    .tile-tag { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 3px; }
+    .tile-time { font-size: 0.96rem; font-weight: 700; color: var(--text); }
+    .tile-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* Visual Comparison Bar Chart */
-    .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px; margin-bottom: 16px; }
-    .card-title { font-size: 0.78rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-    .legend { display: flex; gap: 8px; font-size: 0.68rem; text-transform: none; font-weight: 500; }
-    .leg-item { display: flex; align-items: center; gap: 4px; }
-    .leg-dot { width: 7px; height: 7px; border-radius: 50%; }
+    /* Wave Energy Bars */
+    .bars-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 22px; padding: 16px; margin-bottom: 18px; box-shadow: var(--shadow); }
+    .bars-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.4px; }
+    .bars-legend { display: flex; gap: 10px; font-size: 0.72rem; text-transform: none; font-weight: 600; }
+    .b-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
 
-    .bars-wrap { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; height: 135px; align-items: end; padding-top: 20px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
-    .bar-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; cursor: pointer; position: relative; border-radius: 6px; padding: 2px 0; }
-    .bar-col.active { background: rgba(255, 255, 255, 0.06); }
-    .bar-score { font-size: 0.64rem; font-weight: 700; margin-bottom: 3px; color: var(--text-sub); }
-    .bar-col.active .bar-score { color: #fff; font-size: 0.7rem; }
-    .bar-fill { width: 72%; border-radius: 5px 5px 2px 2px; transition: height 0.3s ease; min-height: 12px; }
-    .bar-col.active .bar-fill { width: 88%; box-shadow: 0 0 10px rgba(255,255,255,0.25); }
-    .bar-lbl { font-size: 0.63rem; color: var(--text-sub); margin-top: 5px; font-weight: 600; text-align: center; line-height: 1.15; }
-    .bar-col.active .bar-lbl { color: var(--sky); font-weight: 700; }
-    .now-dot { position: absolute; top: 2px; width: 5px; height: 5px; border-radius: 50%; background: var(--sky); }
+    .bars-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; height: 135px; align-items: end; border-bottom: 1px solid var(--border); padding-bottom: 6px; padding-top: 22px; }
+    .b-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; cursor: pointer; position: relative; border-radius: 8px; padding: 2px 0; }
+    .b-col.active { background: #f0ebe1; }
+    .b-score { font-size: 0.65rem; font-weight: 700; margin-bottom: 3px; color: var(--text-muted); }
+    .b-col.active .b-score { color: var(--text); font-weight: 800; font-size: 0.72rem; }
+    .b-stem { width: 70%; border-radius: 6px 6px 3px 3px; transition: height 0.3s ease; min-height: 12px; }
+    .b-col.active .b-stem { width: 85%; }
+    .b-label { font-size: 0.66rem; color: var(--text-sub); margin-top: 6px; font-weight: 600; text-align: center; line-height: 1.15; }
+    .b-col.active .b-label { color: #3f362e; font-weight: 800; }
+    .now-indicator { position: absolute; top: 2px; width: 6px; height: 6px; border-radius: 50%; background: var(--zen-green); }
 
     /* Filter Pills */
-    .filter-bar { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 12px; scrollbar-width: none; }
-    .filter-bar::-webkit-scrollbar { display: none; }
-    .f-pill { background: var(--surface); border: 1px solid var(--border); color: var(--text-sub); padding: 6px 12px; border-radius: 20px; font-size: 0.76rem; font-weight: 600; white-space: nowrap; cursor: pointer; }
-    .f-pill.active { background: var(--sky); color: #0f172a; border-color: var(--sky); }
+    .filter-track { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: none; }
+    .filter-track::-webkit-scrollbar { display: none; }
+    .zen-f-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text-sub); padding: 7px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+    .zen-f-btn.active { background: #3f362e; color: #fff; border-color: #3f362e; }
 
-    /* Hour Cards */
-    .hour-list { display: flex; flex-direction: column; gap: 12px; }
-    .h-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px; transition: all 0.2s; scroll-margin-top: 16px; }
-    .h-card.focused { border-color: var(--sky); box-shadow: 0 0 0 1px var(--sky), 0 8px 24px rgba(0,0,0,0.3); }
+    /* Timeline Hour Cards */
+    .timeline-stack { display: flex; flex-direction: column; gap: 14px; }
+    .zen-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 22px; padding: 18px; box-shadow: var(--shadow); transition: all 0.2s ease; scroll-margin-top: 20px; }
+    .zen-card.focused { border-color: var(--border-focus); box-shadow: var(--shadow-hover), 0 0 0 1px var(--border-focus); background: #ffffff; }
 
-    .hc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
-    .hc-time { font-size: 0.98rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    .badge-now { background: var(--sky); color: #0f172a; font-size: 0.63rem; font-weight: 800; padding: 2px 6px; border-radius: 6px; }
-    .hc-sub { font-size: 0.76rem; color: var(--text-sub); margin-top: 2px; }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 8px; }
+    .card-time { font-family: 'Lora', serif; font-size: 1.08rem; font-weight: 600; color: #2c2520; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .badge-live-now { background: var(--zen-green-bg); color: var(--zen-green); border: 1px solid var(--zen-green-border); font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 8px; font-family: 'Quicksand', sans-serif; }
+    .card-target { font-size: 0.8rem; color: var(--text-sub); margin-top: 3px; font-weight: 600; }
 
-    .status-pill { padding: 4px 10px; border-radius: 20px; font-size: 0.73rem; font-weight: 700; text-align: right; white-space: nowrap; }
-    .st-emerald { background: var(--emerald-bg); color: var(--emerald); border: 1px solid rgba(16,185,129,0.3); }
-    .st-sky { background: var(--sky-bg); color: var(--sky); border: 1px solid rgba(56,189,248,0.3); }
-    .st-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
-    .st-rose { background: var(--rose-bg); color: var(--rose); border: 1px solid rgba(244,63,94,0.3); }
+    .card-verdict-pill { padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; text-align: right; white-space: nowrap; }
+    .pill-green { background: var(--zen-green-bg); color: var(--zen-green); border: 1px solid var(--zen-green-border); }
+    .pill-blue { background: var(--zen-blue-bg); color: var(--zen-blue); border: 1px solid var(--zen-blue-border); }
+    .pill-gold { background: var(--zen-gold-bg); color: var(--zen-gold); border: 1px solid var(--zen-gold-border); }
+    .pill-red { background: var(--zen-red-bg); color: var(--zen-red); border: 1px solid var(--zen-red-border); }
 
-    /* Money Radar Banner inside Card */
-    .wallet-banner { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; padding: 9px 11px; border-radius: 10px; margin-bottom: 10px; font-size: 0.8rem; line-height: 1.4; }
-    .wb-good { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.28); }
-    .wb-norm { background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.2); }
-    .wb-imp { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.28); }
-    .wb-lock { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); }
-    .wb-tag { font-weight: 700; font-size: 0.72rem; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
+    /* Wallet Banner inside Card */
+    .wallet-box { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 11px 14px; border-radius: 14px; margin-bottom: 14px; font-size: 0.85rem; line-height: 1.5; }
+    .w-green { background: var(--zen-green-bg); border: 1px solid var(--zen-green-border); }
+    .w-blue { background: var(--zen-blue-bg); border: 1px solid var(--zen-blue-border); }
+    .w-gold { background: var(--zen-gold-bg); border: 1px solid var(--zen-gold-border); }
+    .w-red { background: var(--zen-red-bg); border: 1px solid var(--zen-red-border); }
+    
+    .w-tag { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 8px; white-space: nowrap; flex-shrink: 0; }
+    .w-tag-green { background: var(--zen-green); color: #fff; }
+    .w-tag-blue { background: var(--zen-blue); color: #fff; }
+    .w-tag-gold { background: var(--zen-gold); color: #fff; }
+    .w-tag-red { background: var(--zen-red); color: #fff; }
 
-    .hc-vibe { font-size: 0.86rem; color: #e2e8f0; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .card-vibe { font-style: italic; color: #524a42; font-family: 'Lora', serif; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f0eae1; font-size: 0.92rem; }
 
-    .insight-list { display: flex; flex-direction: column; gap: 8px; }
-    .ins-row { display: flex; gap: 8px; align-items: flex-start; font-size: 0.82rem; line-height: 1.45; }
-    .ins-icon { font-size: 0.9rem; line-height: 1.3; flex-shrink: 0; }
-    .ins-label { font-weight: 700; margin-right: 4px; }
-    .lbl-good { color: var(--emerald); }
-    .lbl-var { color: var(--amber); }
-    .lbl-tip { color: var(--sky); }
+    .lines-list { display: flex; flex-direction: column; gap: 9px; }
+    .line-row { display: flex; gap: 9px; align-items: flex-start; font-size: 0.86rem; line-height: 1.5; }
+    .line-icon { font-size: 0.95rem; line-height: 1.35; flex-shrink: 0; }
+    .line-title { font-weight: 700; margin-right: 4px; }
+    .t-gr { color: var(--zen-green); }
+    .t-go { color: var(--zen-gold); }
+    .t-bl { color: var(--zen-blue); }
 
-    .tech-footer { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border); font-size: 0.69rem; color: var(--text-sub); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
+    .card-foot { margin-top: 14px; padding-top: 10px; border-top: 1px dashed var(--border); font-size: 0.74rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
   </style>
 </head>
 <body>
 
-  <div class="header-card">
-    <div class="top-row">
-      <div class="app-name">
-        <span class="dot-live"></span>
-        <span>Nhịp Vận Khí & Radar Túi Tiền</span>
+  <!-- Thanh điều khiển trên cùng -->
+  <div class="top-bar">
+    <div class="header-row">
+      <div class="brand-title">
+        <span class="brand-dot"></span>
+        <span>Khí Tiết & Vận Thời</span>
       </div>
-      <button class="btn-settings" onclick="toggleSettings()">⚙ Hồ sơ gốc</button>
+      <button class="btn-cfg" onclick="toggleConfig()">⚙ Bản mệnh</button>
     </div>
 
-    <div class="date-controls">
-      <button class="btn-nav" onclick="shiftDay(-1)">◀</button>
-      <input type="date" id="targetDate" onchange="runApp()">
-      <button class="btn-nav" onclick="shiftDay(1)">▶</button>
-      <button class="btn-today" onclick="setToday()">Hôm nay</button>
+    <div class="date-nav-row">
+      <button class="nav-btn" onclick="adjustDay(-1)">◀</button>
+      <input type="date" id="targetDate" onchange="bootApp()">
+      <button class="nav-btn" onclick="adjustDay(1)">▶</button>
+      <button class="nav-btn-today" onclick="goToday()">Hôm nay</button>
     </div>
 
-    <div class="settings-drawer" id="settingsDrawer">
-      <div class="input-group">
+    <div class="cfg-panel" id="cfgPanel">
+      <div class="field-wrap">
         <label>Ngày sinh Dương lịch</label>
-        <input type="date" id="birthDate" value="2002-07-10" onchange="runApp()">
+        <input type="date" id="birthDate" value="2002-07-10" onchange="bootApp()">
       </div>
-      <div class="input-group">
-        <label>Giờ sinh của bạn</label>
-        <select id="birthHour" onchange="runApp()">
+      <div class="field-wrap">
+        <label>Giờ sinh</label>
+        <select id="birthHour" onchange="bootApp()">
           <option value="0">Tý (23h - 01h)</option>
           <option value="1">Sửu (01h - 03h)</option>
           <option value="2">Dần (03h - 05h)</option>
@@ -168,37 +191,37 @@
     </div>
   </div>
 
-  <!-- Tổng kết toàn ngày & Chỉ điểm Túi tiền -->
-  <div class="day-overview" id="dayOverview"></div>
+  <!-- Tổng quan ngày & 4 tiêu điểm -->
+  <div class="day-banner" id="dayBanner"></div>
 
-  <!-- Biểu đồ so sánh 12 khung giờ -->
-  <div class="chart-card">
-    <div class="card-title">
-      <span>Sóng Năng Lượng 12 Khung Giờ</span>
-      <div class="legend">
-        <span class="leg-item"><i class="leg-dot" style="background:var(--emerald)"></i>Tốt</span>
-        <span class="leg-item"><i class="leg-dot" style="background:var(--sky)"></i>Ổn</span>
-        <span class="leg-item"><i class="leg-dot" style="background:var(--amber)"></i>Biến số</span>
-        <span class="leg-item"><i class="leg-dot" style="background:var(--rose)"></i>Trũng</span>
+  <!-- Biểu đồ sóng 12 khung giờ -->
+  <div class="bars-container">
+    <div class="bars-head">
+      <span>Dòng Khí 12 Khung Giờ</span>
+      <div class="bars-legend">
+        <span><i class="b-dot" style="background:var(--zen-green)"></i>Thuận</span>
+        <span><i class="b-dot" style="background:var(--zen-blue)"></i>Bình</span>
+        <span><i class="b-dot" style="background:var(--zen-gold)"></i>Biến động</span>
+        <span><i class="b-dot" style="background:var(--zen-red)"></i>Chậm lại</span>
       </div>
     </div>
-    <div class="bars-wrap" id="barsWrap"></div>
+    <div class="bars-grid" id="barsGrid"></div>
   </div>
 
   <!-- Bộ lọc nhanh -->
-  <div class="filter-bar">
-    <button class="f-pill active" onclick="setFilter('all', this)">Tất cả 12 giờ</button>
-    <button class="f-pill" onclick="setFilter('spend', this)">💸 Giờ Tốt Chi Tiền / Chốt Kèo</button>
-    <button class="f-pill" onclick="setFilter('lock', this)">🔒 Giờ Nên Giữ Ví / Tránh Mua</button>
-    <button class="f-pill" onclick="setFilter('good', this)">✨ Giờ Vận Khí Đẹp</button>
+  <div class="filter-track">
+    <button class="zen-f-btn active" onclick="applyFilter('all', this)">Tất cả 12 giờ</button>
+    <button class="zen-f-btn" onclick="applyFilter('spend', this)">💸 Giờ Nên Chi Tiền</button>
+    <button class="zen-f-btn" onclick="applyFilter('lock', this)">🔒 Giờ Nên Giữ Ví</button>
+    <button class="zen-f-btn" onclick="applyFilter('good', this)">✨ Giờ Thuận Lợi</button>
   </div>
 
-  <!-- Danh sách luận giải từng giờ -->
-  <div class="hour-list" id="hourList"></div>
+  <!-- Danh sách từng canh giờ -->
+  <div class="timeline-stack" id="timelineStack"></div>
 
 <script>
 /* ==========================================================
-   1. LỊCH THIÊN VĂN ÂM DƯƠNG (HỒ NGỌC ĐỨC)
+   THIÊN VĂN & ÂM DƯƠNG (HỒ NGỌC ĐỨC)
    ========================================================== */
 const PI = Math.PI;
 function INT(d) { return Math.floor(d); }
@@ -253,7 +276,7 @@ function convertSolar2Lunar(dd, mm, yy, tz = 7) {
 }
 
 /* ==========================================================
-   2. HỆ THỐNG TRI THỨC TỬ VI + BÁT TỰ + HIỆP KỶ
+   HỆ THỐNG TRI THỨC PHONG THỦY & TỬ VI
    ========================================================== */
 const CAN = ["Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ", "Canh", "Tân", "Nhâm", "Quý"];
 const CHI = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tị", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
@@ -275,93 +298,93 @@ const TU_HOA_TABLE = [
 const PALACE_LIFE_DOMAIN = {
   "Mệnh": {
     domain: "Bản thân & Chủ kiến",
-    vibe: "Năng lượng dồn về chính bạn, trực giác và cái tôi cá nhân thể hiện rõ.",
-    goodTip: "Thời điểm lý tưởng để tự quyết định việc riêng, làm điều mình thích hoặc khởi xướng ý tưởng mới.",
-    badTip: "Dễ suy nghĩ chủ quan hoặc tự tạo áp lực; nên thả lỏng, tránh ôm đồm quá nhiều thứ cùng lúc."
+    vibe: "Năng lượng tập trung vào nội tâm, trực giác sáng rõ, làm chủ quyết định của chính mình.",
+    goodTip: "Rất hợp để tự lên kế hoạch riêng, làm điều mình yêu thích hoặc bắt đầu ý tưởng mới.",
+    badTip: "Tránh ôm đồm quá nhiều việc cùng lúc; hãy giữ tâm thế thả lỏng, thư thái."
   },
   "Phụ Mẫu": {
     domain: "Giấy tờ, Quy chuẩn & Người lớn",
-    vibe: "Khung giờ liên quan đến thủ tục, nguyên tắc, học hỏi hoặc tương tác với cấp trên/người lớn tuổi.",
-    goodTip: "Thuận lợi để xử lý giấy tờ, xin ý kiến người có kinh nghiệm hoặc giải quyết các việc cần sự chỉn chu.",
-    badTip: "Dễ gặp cảm giác gò bó hoặc bị soi xét quy trình; nên làm đúng nguyên tắc, tránh đối đầu gay gắt."
+    vibe: "Khung giờ thuận cho sự tôn nghiêm, giấy tờ hành chính hoặc học hỏi kinh nghiệm.",
+    goodTip: "Thích hợp hoàn thiện thủ tục, trao đổi với người có kinh nghiệm hoặc làm việc cần sự chu đáo.",
+    badTip: "Nên làm việc đúng quy chuẩn, tránh nóng vội hay tranh luận với người lớn tuổi."
   },
   "Phúc Đức": {
-    domain: "Tinh thần & Năng lượng nội tâm",
-    vibe: "Nhịp điệu lắng xuống, thiên về cảm xúc, suy ngẫm và sự bình yên trong tâm trí.",
-    goodTip: "Rất hợp để thư giãn đầu óc, nghe nhạc, cafe một mình, tìm cảm hứng hoặc cầu an.",
-    badTip: "Tâm trạng dễ nghĩ ngợi mông lung; không nên ép bản thân chạy đua việc gấp, hãy cho đầu óc nghỉ ngơi."
+    domain: "Tinh thần & Tĩnh tại nội tâm",
+    vibe: "Không gian lắng dịu, cảm xúc an yên, phục hồi nguồn năng lượng tinh thần.",
+    goodTip: "Rất tuyệt để thưởng trà, nghe nhạc, thiền định, thắp hương cầu an hoặc nghỉ ngơi tĩnh dưỡng.",
+    badTip: "Tâm trí dễ mơ màng; không nên gượng ép bản thân xử lý việc gấp, hãy để đầu óc thư giãn."
   },
   "Điền Trạch": {
     domain: "Không gian sống & Tích lũy",
-    vibe: "Năng lượng hướng về nhà cửa, chỗ ngồi làm việc và sự an toàn, tích lũy tài sản.",
-    goodTip: "Nên ở trong không gian quen thuộc, dọn dẹp góc cá nhân, mua sắm đồ gia dụng/thiết bị hoặc nghỉ ngơi tại nhà.",
-    badTip: "Hạn chế đi xa không cần thiết; để ý các trục trặc lặt vặt về đồ đạc, thiết bị hoặc mạng mẽo trong nhà."
+    vibe: "Khí trường ấm cúng, hướng về tổ ấm, góc làm việc và sự an trú bền vững.",
+    goodTip: "Thích hợp dọn dẹp không gian, sắp xếp lại góc phòng, sắm sửa đồ dùng hoặc nghỉ ngơi tại nhà.",
+    badTip: "Hạn chế di chuyển xa; để ý bảo dưỡng vật dụng, đồ điện tử trong không gian sống."
   },
   "Quan Lộc": {
-    domain: "Hiệu suất & Mục tiêu công việc",
-    vibe: "Tần số của sự tập trung, trách nhiệm và tiến độ giải quyết nhiệm vụ.",
-    goodTip: "Đầu óc vào guồng, rất tốt để giải quyết dứt điểm các đầu việc khó, đẩy nhanh tiến độ hoặc trao đổi chuyên môn.",
-    badTip: "Dễ phát sinh việc đột xuất hoặc cảm thấy quá tải; chỉ nên làm từng việc một, tránh ôm việc mới."
+    domain: "Tiến độ & Hiệu suất công việc",
+    vibe: "Dòng khí hanh thông cho sự tập trung, trách nhiệm và giải quyết dứt điểm các mục tiêu.",
+    goodTip: "Rất tốt để triển khai công việc trọng tâm, đẩy nhanh tiến độ hoặc trao đổi nghiệp vụ.",
+    badTip: "Dễ phát sinh việc đột xuất; nên xử lý từng việc theo thứ tự, tránh ôm đồm việc mới."
   },
   "Nô Bộc": {
-    domain: "Bạn bè, Khách hàng & Hội nhóm",
-    vibe: "Năng lượng xoay quanh các mối quan hệ xã giao, cộng đồng, đồng đội hoặc khách khứa.",
-    goodTip: "Vui vẻ tụ tập bạn bè, đi cà phê tán gẫu, hỗ trợ khách hàng hoặc kết nối thêm người mới.",
-    badTip: "Dễ vướng chuyện bao đồng, hiểu lầm qua tin nhắn hoặc tốn tiền khao đãi vô bổ."
+    domain: "Bạn hữu, Giao tế & Khách quý",
+    vibe: "Không khí cởi mở, kết nối với những người xung quanh và mạng lưới bạn bè.",
+    goodTip: "Thuận lợi để gặp gỡ bằng hữu, uống trà đàm đạo, kết nối đối tác hoặc chăm sóc khách hàng.",
+    badTip: "Tránh can dự chuyện bao đồng hoặc những hiểu lầm không đáng có qua tin nhắn."
   },
   "Thiên Di": {
-    domain: "Ra ngoài, Di chuyển & Đổi gió",
-    vibe: "Khí vận hướng ra bên ngoài, kích thích sự dịch chuyển, đi lại và tiếp xúc môi trường mới.",
-    goodTip: "Rất hợp để đi ra ngoài, dạo phố, đi chơi đổi gió, chạy xe hóng mát hoặc đi gặp gỡ trực tiếp.",
-    badTip: "Ra đường dễ gặp cảnh kẹt xe, thời tiết thất thường hoặc quên đồ; nếu đi lại cần thong thả, chú ý an toàn."
+    domain: "Dạo cảnh, Xuất hành & Đổi gió",
+    vibe: "Khí vận dịch chuyển, mang lại nguồn cảm hứng mới khi tiếp xúc với không gian bên ngoài.",
+    goodTip: "Rất hợp để dạo phố, chạy xe hóng gió, đổi chỗ ngồi làm việc hoặc du ngoạn nhẹ nhàng.",
+    badTip: "Khi ra đường hãy thong thả, quan sát cẩn thận, tránh vội vã để giữ trọn sự an vui."
   },
   "Tật Ách": {
-    domain: "Thể trạng & Phục hồi sức khỏe",
-    vibe: "Cơ thể và thần kinh nhạy cảm hơn bình thường, báo hiệu cần chú ý đến nhịp sinh học.",
-    goodTip: "Nên ưu tiên nghỉ ngơi, ăn uống bồi bổ, chợp mắt hoặc làm những việc thật nhẹ nhàng.",
-    badTip: "Tránh thức khuya hay vắt sức; các thiết bị điện tử hoặc cơ thể dễ báo hiệu mệt mỏi, cần dừng lại nạp năng lượng."
+    domain: "Thể trạng & Dưỡng sinh phục hồi",
+    vibe: "Nhịp sinh học báo hiệu sự chuyển hóa, cần một khoảng lặng để cơ thể tự cân bằng.",
+    goodTip: "Ưu tiên nghỉ ngơi, bồi bổ dinh dưỡng, uống trà thảo mộc hoặc chợp mắt ngắn.",
+    badTip: "Tránh làm việc quá sức; hãy lắng nghe cơ thể và cho các giác quan được nghỉ ngơi."
   },
   "Tài Bạch": {
-    domain: "Tiền bạc, Chi tiêu & Giao dịch",
-    vibe: "Tâm điểm xoay quanh chuyện thu chi, định giá, mua bán hoặc tính toán lợi ích.",
-    goodTip: "Thuận lợi để chốt giao dịch, nhận tiền, thu hồi công nợ hoặc xuất tiền mua món đồ giá trị.",
-    badTip: "Cẩn thận chi tiêu ngẫu hứng quá tay hoặc nhầm lẫn số liệu khi chuyển khoản."
+    domain: "Tài vận, Thu chi & Giao dịch",
+    vibe: "Dòng tiền chuyển động, sự nhạy bén về giá trị và cơ hội tài chính nở rộ.",
+    goodTip: "Rất tốt để thực hiện giao dịch, chốt đơn hàng, nhận tiền hoặc chi cho những khoản xứng đáng.",
+    badTip: "Cẩn thận với việc mua sắm bốc đồng theo cảm xúc; hãy kiểm tra kỹ lưỡng trước khi chuyển tiền."
   },
   "Tử Tức": {
-    domain: "Giải trí, Thú vui & Sáng tạo",
-    vibe: "Không khí thoải mái, thiên về tận hưởng niềm vui cá nhân, chơi bời và các đam mê sáng tạo.",
-    goodTip: "Tuyệt vời để đi chơi, giải trí, chơi game, xem phim, ăn món ngon hoặc nghịch các dự án đam mê.",
-    badTip: "Dễ sa đà vui chơi quên giờ giấc hoặc tốn tiền cho những thú vui nhất thời."
+    domain: "Thú vui, Nghệ thuật & Sáng tạo",
+    vibe: "Bầu không khí tươi vui, nuôi dưỡng niềm cảm hứng nghệ thuật và các sở thích cá nhân.",
+    goodTip: "Thích hợp giải trí, chơi game, xem phim, thưởng thức ẩm thực hoặc theo đuổi đam mê riêng.",
+    badTip: "Tránh vui chơi quên thời gian; giữ cho nhịp sinh hoạt luôn điều độ và tỉnh thức."
   },
   "Phu Thê": {
-    domain: "Tình cảm & Đối tác thân thiết",
-    vibe: "Năng lượng tập trung vào sự gắn kết 1-1, người thương hoặc người đồng hành sát sườn.",
-    goodTip: "Hợp để hẹn hò, tâm sự, hâm nóng tình cảm hoặc bàn bạc thống nhất với đối tác ăn ý.",
-    badTip: "Dễ nhạy cảm, hờn dỗi hoặc bất đồng quan điểm nhỏ; nên nhường nhịn và lắng nghe nhiều hơn."
+    domain: "Tình cảm & Tri kỷ đồng hành",
+    vibe: "Năng lượng gắn kết chân thành, nuôi dưỡng sự thấu hiểu giữa những tâm hồn đồng điệu.",
+    goodTip: "Rất đẹp để hẹn hò, trò chuyện sâu sắc, chia sẻ tâm tư hoặc cùng nhau thưởng ngoạn.",
+    badTip: "Giữ sự bao dung và lắng nghe; tránh để những chấp nhặt nhỏ làm vơi đi sự hòa hợp."
   },
   "Huynh Đệ": {
-    domain: "Anh em, Chiến hữu & Chia sẻ",
-    vibe: "Tương tác gần gũi với anh em, bạn thân hoặc những người cùng chung chí hướng.",
-    goodTip: "Tốt để rủ chiến hữu đi ăn uống, hợp tác làm chung hoặc hỏi han, chia sẻ kinh nghiệm.",
-    badTip: "Tránh tranh luận hơn thua chuyện nhỏ nhặt hoặc vay mượn, đứng ra bảo lãnh tiền bạc."
+    domain: "Chiến hữu & Tương trợ",
+    vibe: "Khí thế đoàn kết, cùng chung chí hướng và sự hỗ trợ đắc lực từ những người thân tín.",
+    goodTip: "Tốt để bàn bạc kế hoạch chung, chia sẻ cơ hội hoặc sum họp cùng những người bạn tâm giao.",
+    badTip: "Minh bạch trong các vấn đề liên quan đến tiền bạc để giữ gìn tình thân vẹn tròn."
   }
 };
 
 const STAR_FLAVOR = {
-  "Tử Vi":      { score: 8,  money: 4,  vibe: "đĩnh đạc, làm chủ tình huống tốt" },
-  "Thiên Cơ":   { score: 7,  money: 2,  vibe: "đầu óc linh hoạt, nảy số nhanh, nhiều ý tưởng mới" },
-  "Thái Dương": { score: 7,  money: 1,  vibe: "năng động, cởi mở, hào phóng" },
-  "Vũ Khúc":    { score: 8,  money: 12, vibe: "thực tế, dứt khoát, cực kỳ nhạy bén chuyện tiền nong" },
-  "Thiên Đồng": { score: 6,  money: -2, vibe: "thư thái, thích ăn ngon mặc đẹp và chi tiêu hưởng thụ" },
-  "Liêm Trinh": { score: 2,  money: 0,  vibe: "nghiêm túc, nguyên tắc nhưng dễ căng thẳng nếu việc trái ý" },
-  "Thiên Phủ":  { score: 9,  money: 14, vibe: "vững vàng, giữ tiền chắc, mua sắm thông minh" },
-  "Thái Âm":    { score: 8,  money: 10, vibe: "nhẹ nhàng, tinh tế, có duyên với tài chính và bất động sản" },
-  "Tham Lang":  { score: 5,  money: -3, vibe: "hào hứng giao lưu, dễ rút hầu bao cho tiệc tùng/khám phá" },
-  "Cự Môn":     { score: -6, money: -5, vibe: "sắc sảo nhưng dễ vướng tranh luận, cãi cọ giá cả" },
-  "Thiên Tướng":{ score: 7,  money: 5,  vibe: "lịch thiệp, công bằng, giao dịch minh bạch" },
-  "Thiên Lương":{ score: 8,  money: 4,  vibe: "bình an, có quý nhân che chở, mọi sự êm xuôi" },
-  "Thất Sát":   { score: -3, money: -6, vibe: "nhịp độ dồn dập, dễ quyết định xuống tiền quá vội" },
-  "Phá Quân":   { score: -5, money: -14,vibe: "thích phá cách, rất dễ vung tay tiêu pha mạnh hoặc đập đi xây lại" }
+  "Tử Vi":      { score: 8,  money: 5,  vibe: "trầm tĩnh, tự chủ và đĩnh đạc" },
+  "Thiên Cơ":   { score: 7,  money: 3,  vibe: "linh hoạt, mẫn tiệp, nhiều nguồn cảm hứng mới" },
+  "Thái Dương": { score: 7,  money: 2,  vibe: "quang minh, tươi sáng, ấm áp và hướng ngoại" },
+  "Vũ Khúc":    { score: 8,  money: 12, vibe: "quả quyết, thiết thực, nhạy bén tài vận" },
+  "Thiên Đồng": { score: 6,  money: -2, vibe: "hồn nhiên, an nhàn, thích sự thanh cảnh hưởng thụ" },
+  "Liêm Trinh": { score: 2,  money: 0,  vibe: "ngăn nắp, chuẩn mực, đề cao kỷ cương" },
+  "Thiên Phủ":  { score: 9,  money: 14, vibe: "vững chãi, bao dung, tích lũy tài lộc bền chắc" },
+  "Thái Âm":    { score: 8,  money: 10, vibe: "dịu dàng, thanh khiết, hợp với nghệ thuật và tài chính" },
+  "Tham Lang":  { score: 5,  money: -3, vibe: "hứng khởi khám phá, yêu thích giao tiếp và trải nghiệm" },
+  "Cự Môn":     { score: -6, money: -5, vibe: "sâu sắc trong suy xét nhưng cẩn trọng ngôn từ" },
+  "Thiên Tướng":{ score: 7,  money: 5,  vibe: "nhã nhặn, công tâm, phong thái ung dung" },
+  "Thiên Lương":{ score: 8,  money: 4,  vibe: "từ ái, che chở, gặp hung hóa cát êm đềm" },
+  "Thất Sát":   { score: -3, money: -6, vibe: "mạnh mẽ, dứt khoát, mong muốn sự nhanh gọn" },
+  "Phá Quân":   { score: -5, money: -14,vibe: "đột phá, đổi mới, sẵn sàng cho những khởi đầu mới" }
 };
 
 const LOC_TON_POS = [2, 3, 5, 6, 5, 6, 8, 9, 11, 0];
@@ -369,15 +392,12 @@ const KHOI_VIET_POS = [[1, 7], [0, 8], [11, 9], [11, 9], [1, 7], [0, 8], [6, 2],
 
 function buildBaseChart(lunarBirth, birthHour) {
   let yCan = (lunarBirth.y + 6) % 10;
-  let yChi = (lunarBirth.y + 8) % 12;
   let posMonth = (2 + lunarBirth.m - 1) % 12;
   let cungMenh = (posMonth - birthHour + 12) % 12;
 
   let startCanDan = ((yCan % 5) * 2 + 2) % 10;
   let menhCan = (startCanDan + (cungMenh - 2 + 12) % 12) % 10;
-  let valCan = Math.floor(menhCan / 2) + 1;
-  let valChi = [0, 0, 1, 1, 2, 2, 0, 0, 1, 1, 2, 2][cungMenh];
-  let napAmIdx = valCan + valChi;
+  let napAmIdx = Math.floor(menhCan / 2) + 1 + [0, 0, 1, 1, 2, 2, 0, 0, 1, 1, 2, 2][cungMenh];
   if (napAmIdx > 5) napAmIdx -= 5;
   let cuc = { 1: 4, 2: 2, 3: 6, 4: 5, 5: 3 }[napAmIdx];
 
@@ -405,10 +425,8 @@ function buildBaseChart(lunarBirth, birthHour) {
   let locTon = LOC_TON_POS[yCan], kinh = (locTon + 1) % 12, da = (locTon - 1 + 12) % 12;
   let [khoi, viet] = KHOI_VIET_POS[yCan];
 
-  // An Đại Hao & Tiểu Hao (Vòng Bác Sĩ theo Lộc Tồn; Dương Nam đi thuận, Âm Nam đi nghịch)
   let dir = (yCan % 2 === 0) ? 1 : -1;
-  let tieuHao = (locTon + dir * 3 + 12) % 12;
-  let daiHao = (locTon + dir * 9 + 12) % 12;
+  let tieuHao = (locTon + dir * 3 + 12) % 12, daiHao = (locTon + dir * 9 + 12) % 12;
 
   palaces[xuong].catTinh.push("Văn Xương"); palaces[khuc].catTinh.push("Văn Khúc");
   palaces[taPhu].catTinh.push("Tả Phù"); palaces[huuBat].catTinh.push("Hữu Bật");
@@ -420,17 +438,14 @@ function buildBaseChart(lunarBirth, birthHour) {
   return { palaces };
 }
 
-/* ==========================================================
-   3. BỘ PHÂN TÍCH VẬN KHÍ & RADAR TÚI TIỀN TỪNG KHUNG GIỜ
-   ========================================================== */
 function getBaziTenGod(dayCan, hourCan) {
   let elDay = Math.floor(dayCan / 2), elHour = Math.floor(hourCan / 2);
   let samePol = (dayCan % 2 === hourCan % 2);
-  if (elDay === elHour) return samePol ? { name: "Tỷ Kiên", moneyEffect: -4, note: "dễ hùn hạp, chia sẻ chi phí với bạn bè" } : { name: "Kiếp Tài", moneyEffect: -15, note: "trực Kiếp Tài (Đoạt Tài) — dễ mua đắt, bị chặt chém hoặc chi tiền vì cả nể" };
-  if ((elDay + 1) % 5 === elHour) return { name: samePol ? "Thực Thần" : "Thương Quan", moneyEffect: 10, note: "Thực Thương sinh Tài — đầu óc tỉnh táo, chi tiền đầu tư hoặc mua sắm rất khôn ngoan" };
-  if ((elDay + 2) % 5 === elHour) return { name: samePol ? "Thiên Tài" : "Chính Tài", moneyEffect: 14, note: "Tài tinh hiển lộ — giờ đẹp để giao dịch, chốt đơn, mua bán đúng giá trị" };
-  if ((elDay + 3) % 5 === elHour) return { name: samePol ? "Thất Sát" : "Chính Quan", moneyEffect: -2, note: "chi tiêu có kiểm soát, ưu tiên trả các khoản phí cố định/bắt buộc" };
-  return { name: samePol ? "Thiên Ấn" : "Chính Ấn", moneyEffect: 5, note: "Ấn tinh hộ thân — thích hợp chi tiền cho học tập, thiết bị, giấy tờ hoặc sức khỏe" };
+  if (elDay === elHour) return samePol ? { name: "Tỷ Kiên", moneyEffect: -4, note: "thích hợp chia sẻ, gắn kết bạn bè" } : { name: "Kiếp Tài", moneyEffect: -15, note: "trực Kiếp Tài — nên giữ ví, cẩn thận mua đắt hoặc chi tiền vì nể nang" };
+  if ((elDay + 1) % 5 === elHour) return { name: samePol ? "Thực Thần" : "Thương Quan", moneyEffect: 10, note: "Thực Thương sinh Tài — tâm trí thanh sáng, chi tiêu hoặc đầu tư rất thông minh" };
+  if ((elDay + 2) % 5 === elHour) return { name: samePol ? "Thiên Tài" : "Chính Tài", moneyEffect: 14, note: "Tài tinh hiển lộ — thuận lợi giao dịch, chốt đơn, sắm đồ đúng giá trị" };
+  if ((elDay + 3) % 5 === elHour) return { name: samePol ? "Thất Sát" : "Chính Quan", moneyEffect: -2, note: "kỷ luật chi tiêu, ưu tiên các khoản cần thiết" };
+  return { name: samePol ? "Thiên Ấn" : "Chính Ấn", moneyEffect: 5, note: "Ấn tinh trợ mệnh — hợp chi tiền cho tri thức, sức khỏe hoặc giấy tờ" };
 }
 
 function analyzeHourSlot(chart, cungLuuThoi, dayCan, dayChi, hourCan, hIdx, khongVongPair) {
@@ -440,13 +455,9 @@ function analyzeHourSlot(chart, cungLuuThoi, dayCan, dayChi, hourCan, hIdx, khon
   let pTam2 = chart.palaces[(cungLuuThoi + 8) % 12];
 
   let domainInfo = PALACE_LIFE_DOMAIN[pMain.cungName];
-  let score = 60;
-  let moneyScore = 55;
-  let positives = [];
-  let variables = [];
-  let moneyReasons = [];
+  let score = 60, moneyScore = 55;
+  let positives = [], variables = [], moneyReasons = [];
 
-  // 1. Chính Tinh tại Bản cung (hoặc mượn Xung chiếu)
   let mainStars = pMain.chinhTinh.length ? pMain.chinhTinh : pXung.chinhTinh;
   let starVibes = [];
   mainStars.forEach(st => {
@@ -457,73 +468,61 @@ function analyzeHourSlot(chart, cungLuuThoi, dayCan, dayChi, hourCan, hIdx, khon
       moneyScore += Math.round(sf.money * factor);
       starVibes.push(sf.vibe);
       if (["Vũ Khúc", "Thiên Phủ", "Thái Âm"].includes(st) && pMain.chinhTinh.length) {
-        moneyReasons.push(`Có Tài tinh <b>${st}</b> tọa thủ: Giữ tiền chắc, định giá chuẩn xác`);
+        moneyReasons.push(`Có Tài tinh <b>${st}</b> tọa thủ: Tích lũy vững vàng, định giá sáng suốt`);
       }
       if (st === "Phá Quân" && pMain.chinhTinh.length) {
-        moneyReasons.push(`Gặp <b>Phá Quân</b>: Rất dễ hứng lên chi một khoản lớn (hao tài trước rồi mới ổn)`);
+        moneyReasons.push(`Gặp <b>Phá Quân</b>: Dễ vung tay chi khoản lớn cho những ý tưởng mới`);
       }
     }
   });
 
-  // 2. Xét Cung chức năng đối với Tiền bạc
   if (["Tài Bạch", "Điền Trạch"].includes(pMain.cungName)) {
     moneyScore += 10;
-    moneyReasons.push(`Lưu Thời vào cung <b>${pMain.cungName}</b>: Mọi giao dịch mua bán, tích lũy tài sản đều đúng trọng tâm`);
-  } else if (["Nô Bộc", "Tử Tức"].includes(pMain.cungName)) {
-    moneyScore -= 5;
+    moneyReasons.push(`Lưu Thời vào cung <b>${pMain.cungName}</b>: Mọi khoản chi sắm, tích lũy đều đơm hoa kết trái`);
   }
 
-  // 3. Cát Tinh, Hung Tinh & Song Hao (Tử Vi Đẩu Số Toàn Thư)
   if (pMain.catTinh.includes("Lộc Tồn")) {
-    score += 12;
-    moneyScore += 16;
-    positives.push("Có <b>Lộc Tồn</b> tọa thủ: Dễ có lộc ăn uống, quà cáp hoặc thuận lợi về tiền bạc.");
-    moneyReasons.push("Có <b>Lộc Tồn</b>: Xuất tiền đổi lại giá trị xứng đáng, dễ gặp ưu đãi");
+    score += 12; moneyScore += 16;
+    positives.push("Có <b>Lộc Tồn</b> tọa thủ: Dễ đón nhận quà cáp, lộc ăn uống hoặc niềm vui tài chính.");
+    moneyReasons.push("Có <b>Lộc Tồn</b>: Xuất tiền hanh thông, đổi lại sự hài lòng xứng đáng");
   }
   if (pMain.catTinh.includes("Thiên Khôi") || pMain.catTinh.includes("Thiên Việt")) {
-    score += 10;
-    moneyScore += 6;
-    positives.push("Gặp <b>Quý nhân (Khôi/Việt)</b>: Ra ngoài hay giao dịch đều dễ gặp người hỗ trợ nhiệt tình.");
+    score += 10; moneyScore += 6;
+    positives.push("Gặp <b>Quý nhân (Khôi/Việt)</b>: Mọi việc xuất hành hay giao dịch đều có người trợ duyên thiện lành.");
   }
   if (pMain.haoTinh.length > 0) {
     let haoName = pMain.haoTinh.join("/");
     moneyScore -= 16;
-    variables.push(`Gặp sao <b>${haoName}</b>: Dễ phát sinh khoản chi lặt vặt ngoài dự kiến hoặc mua sắm ngẫu hứng.`);
-    moneyReasons.push(`Đụng sao <b>${haoName}</b>: Dễ hao tiền cho những thứ không thực sự cần thiết`);
+    variables.push(`Gặp sao <b>${haoName}</b>: Dễ phát sinh các khoản chi ngẫu hứng ngoài dự toán.`);
+    moneyReasons.push(`Đụng sao <b>${haoName}</b>: Dễ xuất tiền theo cảm xúc nhất thời`);
   }
   if (pMain.hungTinh.includes("Địa Không") || pMain.hungTinh.includes("Địa Kiếp")) {
-    score -= 14;
-    moneyScore -= 20;
-    variables.push("Gặp biến số <b>Không/Kiếp</b>: Kế hoạch dễ đổi phút chót, coi chừng chi tiêu bốc đồng.");
-    moneyReasons.push("Dính <b>Không/Kiếp</b>: Cẩn thận mua hớ, rơi rớt hoặc mất tiền oan");
+    score -= 14; moneyScore -= 20;
+    variables.push("Gặp biến số <b>Không/Kiếp</b>: Lịch trình dễ chuyển hướng, nên thong dong thích ứng.");
+    moneyReasons.push("Dính <b>Không/Kiếp</b>: Cẩn thận nhầm lẫn, rơi đồ hoặc mua sắm bị hớ");
   }
   if (pMain.hungTinh.includes("Kình Dương") || pMain.hungTinh.includes("Đà La")) {
-    score -= 10;
-    moneyScore -= 8;
-    variables.push("Vướng <b>Kình/Đà</b>: Dễ gặp sự chậm trễ, chờ đợi hoặc tâm lý hơi sốt ruột.");
+    score -= 10; moneyScore -= 8;
+    variables.push("Vướng <b>Kình/Đà</b>: Tiến độ có thể chậm lại đôi chút; hãy kiên nhẫn, không cần vội.");
   }
 
-  // 4. Bát Tự Thập Thần (Tam Mệnh Thông Hội)
   let tenGod = getBaziTenGod(dayCan, hourCan);
   moneyScore += tenGod.moneyEffect;
   if (tenGod.name === "Kiếp Tài") {
-    variables.push(`Can giờ phạm <b>Kiếp Tài</b>: Ra ngoài hay mua bán cẩn thận bị hớ giá hoặc tốn tiền vì nể nang.`);
-    moneyReasons.push(`Phạm <b>Kiếp Tài</b> (Bát Tự): Dễ bị nói thách, mua đắt hoặc chi hộ người khác`);
+    variables.push(`Can giờ gặp <b>Kiếp Tài</b>: Giữ gìn túi tiền cẩn thận, tránh chi tiêu vì sự cả nể.`);
+    moneyReasons.push(`Phạm <b>Kiếp Tài</b>: Nên giữ ví, cẩn thận mua đắt hoặc chi hộ người khác`);
   } else if (["Chính Tài", "Thiên Tài", "Thực Thần"].includes(tenGod.name)) {
-    moneyReasons.push(`Can giờ đắc <b>${tenGod.name}</b>: Nhạy bén giá cả, thuận lợi xuất tiền chốt deal`);
+    moneyReasons.push(`Can giờ đắc <b>${tenGod.name}</b>: Nhạy bén tài khí, thuận lợi chốt giao dịch`);
   }
 
-  // 5. Giờ Tuần Không / Không Vong (Hiệp Kỷ Biện Phương Thư)
   let isKhongVong = khongVongPair.includes(hIdx);
   if (isKhongVong) {
     moneyScore -= 14;
-    variables.push("Giờ rơi vào <b>Tuần Không (Không Vong)</b>: Theo *Hiệp Kỷ Biện Phương Thư*, tránh đặt cọc lớn hoặc ký hợp đồng mua bán lúc này vì dễ đổi ý/trục trặc.");
-    moneyReasons.push("Phạm <b>Giờ Không Vong</b>: Kỵ đặt cọc, cho vay hoặc chuyển khoản đầu tư lớn");
+    variables.push("Giờ gặp <b>Tuần Không</b>: Khí trường lắng dịu, hợp tĩnh tâm nghỉ ngơi hơn là xuất tiền giao dịch lớn.");
+    moneyReasons.push("Phạm <b>Giờ Không Vong</b>: Kỵ đặt cọc lớn hoặc ký kết hợp đồng tài chính");
   }
 
-  // 6. Kích nổ Tứ Hóa của Giờ & Ngày
-  let hourHoa = TU_HOA_TABLE[hourCan];
-  let dayHoa = TU_HOA_TABLE[dayCan];
+  let hourHoa = TU_HOA_TABLE[hourCan], dayHoa = TU_HOA_TABLE[dayCan];
   let zones = [
     { p: pMain, w: 1.0, posName: "trực tiếp" },
     { p: pXung, w: 0.75, posName: "chiếu về" },
@@ -535,97 +534,90 @@ function analyzeHourSlot(chart, cungLuuThoi, dayCan, dayChi, hourCan, hIdx, khon
     let stars = [...z.p.chinhTinh, ...z.p.catTinh];
     stars.forEach(st => {
       if (st === hourHoa[0]) {
-        score += Math.round(18 * z.w);
-        moneyScore += Math.round(20 * z.w);
+        score += Math.round(18 * z.w); moneyScore += Math.round(20 * z.w);
         if (z.w >= 0.75) {
-          positives.push(`Kích hoạt <b>Hóa Lộc (${st})</b> ${z.posName}: Tâm trạng vui vẻ, dễ đón tin vui tài chính hoặc chốt kèo mượt.`);
-          moneyReasons.push(`Kích nổ <b>Lưu Hóa Lộc (${st})</b>: Dòng tiền hanh thông, chi ra dễ sinh lời`);
+          positives.push(`Kích hoạt <b>Hóa Lộc (${st})</b> ${z.posName}: Tâm tình an vui, tài khí vượng phát, công việc hay dạo chơi đều êm đẹp.`);
+          moneyReasons.push(`Kích nổ <b>Lưu Hóa Lộc (${st})</b>: Dòng tiền thuận dòng, chi ra đem lại phúc lộc`);
         }
       }
       if (st === hourHoa[1]) {
-        score += Math.round(14 * z.w);
-        moneyScore += Math.round(8 * z.w);
-        if (z.w >= 0.75) positives.push(`Kích hoạt <b>Hóa Quyền (${st})</b> ${z.posName}: Bạn nắm thế chủ động, giải quyết mọi việc nhanh gọn.`);
+        score += Math.round(14 * z.w); moneyScore += Math.round(8 * z.w);
+        if (z.w >= 0.75) positives.push(`Kích hoạt <b>Hóa Quyền (${st})</b> ${z.posName}: Làm chủ tình thế, giải quyết công việc quả quyết, tự tin.`);
       }
       if (st === hourHoa[2]) {
         score += Math.round(12 * z.w);
-        if (z.w >= 0.75) positives.push(`Kích hoạt <b>Hóa Khoa (${st})</b> ${z.posName}: Mọi sự êm đẹp, có rắc rối nhỏ cũng tự tháo gỡ nhẹ nhàng.`);
+        if (z.w >= 0.75) positives.push(`Kích hoạt <b>Hóa Khoa (${st})</b> ${z.posName}: Trí tuệ quang minh, mọi vướng mắc đều tìm được lối thoát nhẹ nhàng.`);
       }
       if (st === hourHoa[3]) {
-        score -= Math.round(20 * z.w);
-        moneyScore -= Math.round(22 * z.w);
+        score -= Math.round(20 * z.w); moneyScore -= Math.round(22 * z.w);
         if (z.w >= 0.75) {
-          variables.push(`Kích hoạt <b>Hóa Kỵ (${st})</b> ${z.posName}: Dễ phát sinh trục trặc lặt vặt, lỗi thanh toán hoặc hiểu lầm.`);
-          moneyReasons.push(`Dính <b>Lưu Hóa Kỵ (${st})</b>: Cẩn thận lỗi chuyển khoản, tranh chấp tiền bạc`);
+          variables.push(`Kích hoạt <b>Hóa Kỵ (${st})</b> ${z.posName}: Cần sự nhẫn nại, tránh để tâm trạng ảnh hưởng đến lời nói và chi tiêu.`);
+          moneyReasons.push(`Dính <b>Lưu Hóa Kỵ (${st})</b>: Tránh giao dịch vội vã, đề phòng lỗi chuyển khoản`);
         }
       }
       if (st === dayHoa[0] && z.w >= 0.75) {
-        score += 8;
-        moneyScore += 10;
-        positives.push(`Hưởng trọn <b>Lộc của cả ngày (${st})</b>: Vận may tự tìm đến, giao dịch hay xuất hành đều suôn sẻ.`);
+        score += 8; moneyScore += 10;
+        positives.push(`Hưởng trọn <b>Lộc của cả ngày (${st})</b>: Năng lượng lành hộ trì, gặp nhiều thuận duyên.`);
       }
       if (st === dayHoa[3] && z.w >= 0.75) {
-        score -= 10;
-        moneyScore -= 12;
-        variables.push(`Chạm điểm <b>Hóa Kỵ của ngày (${st})</b>: Không nên vội vàng tranh cãi hay quyết định chuyện tiền nong lớn.`);
+        score -= 10; moneyScore -= 12;
+        variables.push(`Chạm điểm <b>Hóa Kỵ của ngày (${st})</b>: Nên giữ tâm thế bình hòa, không vội quyết định chuyện lớn.`);
       }
     });
   });
 
-  score = Math.max(18, Math.min(96, score));
-  moneyScore = Math.max(15, Math.min(96, moneyScore));
+  score = Math.max(20, Math.min(96, score));
+  moneyScore = Math.max(16, Math.min(96, moneyScore));
 
-  // Phân loại Tín hiệu Túi tiền (4 cấp độ rõ ràng)
-  let walletStatus = "", walletClass = "", walletTagBg = "", walletAdvice = "", walletType = "";
+  let walletStatus = "", walletClass = "", walletTagClass = "", walletAdvice = "", walletType = "";
   let mainReason = moneyReasons.length ? moneyReasons[0] : `Ngũ hành giờ thuộc <b>${tenGod.name}</b> (${tenGod.note})`;
 
   if (moneyScore >= 70 && !isKhongVong) {
-    walletStatus = "Nên Chi / Đáng Tiền";
-    walletClass = "wb-good";
-    walletTagBg = "background:var(--emerald); color:#0f172a;";
-    walletAdvice = `${mainReason}. Rất tốt để chốt đơn, đặt cọc, mua sắm đồ giá trị hoặc đầu tư.`;
+    walletStatus = "Nên Chi / Xứng Đáng";
+    walletClass = "w-green";
+    walletTagClass = "w-tag-green";
+    walletAdvice = `${mainReason}. Thuận lợi chốt đơn, đặt cọc, mua sắm đồ dùng hữu ích hoặc đầu tư.`;
     walletType = "spend";
   } else if (moneyScore >= 52) {
-    walletStatus = "Chi Tiêu Bình Thường";
-    walletClass = "wb-norm";
-    walletTagBg = "background:var(--sky); color:#0f172a;";
-    walletAdvice = `${mainReason}. Phù hợp chi tiêu ăn uống, sinh hoạt thường nhật đúng nhu cầu.`;
+    walletStatus = "Chi Tiêu Bình Hòa";
+    walletClass = "w-blue";
+    walletTagClass = "w-tag-blue";
+    walletAdvice = `${mainReason}. Phù hợp chi tiêu thường nhật, ẩm thực, sinh hoạt thiết yếu.`;
     walletType = "normal";
   } else if (moneyScore >= 38) {
-    walletStatus = "Dễ Vung Tay Quá Trán";
-    walletClass = "wb-imp";
-    walletTagBg = "background:var(--amber); color:#0f172a;";
-    walletAdvice = `${mainReason}. Chỉ nên mua thứ đã lên danh sách sẵn, tránh lướt sàn TMĐT chốt đơn ngẫu hứng.`;
+    walletStatus = "Cẩn Trọng Túi Tiền";
+    walletClass = "w-gold";
+    walletTagClass = "w-tag-gold";
+    walletAdvice = `${mainReason}. Chỉ nên mua theo dự định có sẵn, tránh chi tiêu ngẫu hứng.`;
     walletType = "lock";
   } else {
-    walletStatus = "Khóa Ví / Kỵ Xuất Tiền";
-    walletClass = "wb-lock";
-    walletTagBg = "background:var(--rose); color:#fff;";
-    walletAdvice = `${mainReason}. Tuyệt đối tránh đặt cọc lớn, không cho vay mượn hay mua đồ đắt tiền giờ này.`;
+    walletStatus = "Nên Giữ Ví / Tránh Chi";
+    walletClass = "w-red";
+    walletTagClass = "w-tag-red";
+    walletAdvice = `${mainReason}. Không nên đặt cọc lớn, cho vay mượn hay mua sắm tài sản lớn giờ này.`;
     walletType = "lock";
   }
 
-  // Phân loại Vận khí chung
   let statusLabel = "", statusClass = "", barColor = "", advice = "";
   if (score >= 74) {
-    statusLabel = "Rất Thuận Lợi"; statusClass = "st-emerald"; barColor = "var(--emerald)"; advice = domainInfo.goodTip;
+    statusLabel = "Rất Thuận Lợi"; statusClass = "pill-green"; barColor = "var(--zen-green)"; advice = domainInfo.goodTip;
   } else if (score >= 58) {
-    statusLabel = "Êm Xuôi / Ổn Định"; statusClass = "st-sky"; barColor = "var(--sky)"; advice = domainInfo.goodTip;
+    statusLabel = "Bình An / Êm Xuôi"; statusClass = "pill-blue"; barColor = "var(--zen-blue)"; advice = domainInfo.goodTip;
   } else if (score >= 44) {
-    statusLabel = "Có Biến Động Nhẹ"; statusClass = "st-amber"; barColor = "var(--amber)"; advice = `${domainInfo.badTip} Thích hợp giữ nhịp độ vừa phải.`;
+    statusLabel = "Biến Động Nhẹ"; statusClass = "pill-gold"; barColor = "var(--zen-gold)"; advice = `${domainInfo.badTip} Giữ nhịp độ thong thả, làm việc quen tay.`;
   } else {
-    statusLabel = "Nên Nghỉ Ngơi / Chậm Lại"; statusClass = "st-rose"; barColor = "var(--rose)"; advice = domainInfo.badTip;
+    statusLabel = "Nên Nghỉ Ngơi / Tĩnh Lặng"; statusClass = "pill-red"; barColor = "var(--zen-red)"; advice = domainInfo.badTip;
   }
 
   if (!positives.length && score >= 55) {
-    positives.push("Khí vận bình ổn, không có xung đột cản trở, thích hợp duy trì lịch trình tự nhiên.");
+    positives.push("Khí vận điều hòa, không gặp cản trở, thuận theo tự nhiên mà hành sự.");
   }
 
-  let vibeSentence = `${domainInfo.vibe} Sắc thái khung giờ này ${starVibes.join("; ")}.`;
+  let vibeSentence = `${domainInfo.vibe} Sắc thái khung giờ ${starVibes.join("; ")}.`;
 
   return {
     score, moneyScore, statusLabel, statusClass, barColor,
-    walletStatus, walletClass, walletTagBg, walletAdvice, walletType,
+    walletStatus, walletClass, walletTagClass, walletAdvice, walletType,
     tenGodName: tenGod.name, isKhongVong,
     domain: domainInfo.domain, cungName: pMain.cungName,
     mainStars: mainStars.join(", "), vibeSentence, positives, variables, advice
@@ -633,7 +625,7 @@ function analyzeHourSlot(chart, cungLuuThoi, dayCan, dayChi, hourCan, hIdx, khon
 }
 
 /* ==========================================================
-   4. ĐIỀU KHIỂN GIAO DIỆN & HIỂN THỊ
+   GIAO DIỆN & ĐIỀU KHIỂN
    ========================================================== */
 let APP_DATA = [];
 let CURRENT_FILTER = "all";
@@ -654,8 +646,8 @@ const TIME_SLOTS = [
   { h: 11, range: "21:00 - 23:00", short: "21h" }
 ];
 
-function toggleSettings() {
-  document.getElementById("settingsDrawer").classList.toggle("open");
+function toggleConfig() {
+  document.getElementById("cfgPanel").classList.toggle("open");
 }
 
 function getNowHourIdx() {
@@ -663,14 +655,14 @@ function getNowHourIdx() {
   return hr === 23 ? 0 : Math.floor((hr + 1) / 2);
 }
 
-function runApp() {
+function bootApp() {
   let bStr = document.getElementById("birthDate").value;
   let tStr = document.getElementById("targetDate").value;
   let bHour = parseInt(document.getElementById("birthHour").value);
   if (!bStr || !tStr) return;
 
-  localStorage.setItem("v4_birthDate", bStr);
-  localStorage.setItem("v4_birthHour", bHour);
+  localStorage.setItem("zen_birthDate", bStr);
+  localStorage.setItem("zen_birthHour", bHour);
 
   let [by, bm, bd] = bStr.split("-").map(Number);
   let [ty, tm, td] = tStr.split("-").map(Number);
@@ -687,7 +679,6 @@ function runApp() {
   let dayCan = (lunarTarget.jd + 9) % 10;
   let dayChi = (lunarTarget.jd + 1) % 12;
 
-  // Tính 2 giờ Không Vong của Ngày theo Hiệp Kỷ Biện Phương Thư
   let kv1 = (dayChi - dayCan + 10 + 12) % 12;
   let kv2 = (dayChi - dayCan + 11 + 12) % 12;
   let khongVongPair = [kv1, kv2];
@@ -724,49 +715,49 @@ function renderOverview(lunarTarget, dayCan, dayChi, dayPalace, kvPair) {
   let dayHoaLoc = TU_HOA_TABLE[dayCan][0];
   let dayHoaKy = TU_HOA_TABLE[dayCan][3];
 
-  document.getElementById("dayOverview").innerHTML = `
-    <div class="badge-row">
-      <span class="lunar-badge">Âm lịch: ${lunarTarget.d}/${lunarTarget.m}/${lunarTarget.y} • Ngày ${CAN[dayCan]} ${CHI[dayChi]}</span>
-      <span class="kv-badge">Giờ Không Vong: ${CHI[kvPair[0]]}, ${CHI[kvPair[1]]}</span>
+  document.getElementById("dayBanner").innerHTML = `
+    <div class="badge-capsules">
+      <span class="zen-pill">Âm lịch: ${lunarTarget.d}/${lunarTarget.m}/${lunarTarget.y} • Ngày ${CAN[dayCan]} ${CHI[dayChi]}</span>
+      <span class="zen-pill zen-pill-hl">Giờ Không Vong: ${CHI[kvPair[0]]}, ${CHI[kvPair[1]]}</span>
     </div>
-    <div class="day-headline">Tâm điểm ngày: ${dayDomain.domain} (Cung ${dayPalace.cungName})</div>
-    <div class="day-desc">
-      ${dayDomain.vibe} Sao <b>${dayHoaLoc}</b> Hóa Lộc mang lại điểm sáng tài khí, nhưng cần để ý sao <b>${dayHoaKy}</b> Hóa Kỵ để tránh chi tiêu vội vàng.
+    <div class="day-maintitle">Trọng tâm ngày: ${dayDomain.domain} (Cung ${dayPalace.cungName})</div>
+    <div class="day-maindesc">
+      ${dayDomain.vibe} Sao <b>${dayHoaLoc}</b> Hóa Lộc mang lại thiện duyên và hỷ khí, nhưng cần sự an tĩnh trước sao <b>${dayHoaKy}</b> Hóa Kỵ để giữ cho tâm trí luôn sáng suốt.
     </div>
-    <div class="highlight-grid">
-      <div class="hl-box best" onclick="focusHour(${bestH.h})">
-        <div class="hl-label" style="color:var(--emerald)">✨ Giờ Vận Khí Đẹp Nhất</div>
-        <div class="hl-time">${bestH.range} (${CHI[bestH.h]})</div>
-        <div class="hl-note">${bestH.domain} • ${bestH.score}đ</div>
+    <div class="summary-tiles">
+      <div class="zen-tile t-green" onclick="jumpToHour(${bestH.h})">
+        <div class="tile-tag" style="color:var(--zen-green)">✨ Giờ Khí Vận Đẹp Nhất</div>
+        <div class="tile-time">${bestH.range} (${CHI[bestH.h]})</div>
+        <div class="tile-sub">${bestH.domain} • ${bestH.score}đ</div>
       </div>
-      <div class="hl-box caution" onclick="focusHour(${lowH.h})">
-        <div class="hl-label" style="color:var(--rose)">⚡ Giờ Nên Chậm Lại</div>
-        <div class="hl-time">${lowH.range} (${CHI[lowH.h]})</div>
-        <div class="hl-note">${lowH.domain} • ${lowH.score}đ</div>
+      <div class="zen-tile t-red" onclick="jumpToHour(${lowH.h})">
+        <div class="tile-tag" style="color:var(--zen-red)">🌿 Giờ Nên Tĩnh Lặng</div>
+        <div class="tile-time">${lowH.range} (${CHI[lowH.h]})</div>
+        <div class="tile-sub">${lowH.domain} • ${lowH.score}đ</div>
       </div>
-      <div class="hl-box spend" onclick="focusHour(${bestSpendH.h})">
-        <div class="hl-label" style="color:var(--sky)">💸 Giờ Xuất Tiền Tốt Nhất</div>
-        <div class="hl-time">${bestSpendH.range} (${CHI[bestSpendH.h]})</div>
-        <div class="hl-note">${bestSpendH.walletStatus} • ${bestSpendH.moneyScore}đ</div>
+      <div class="zen-tile t-blue" onclick="jumpToHour(${bestSpendH.h})">
+        <div class="tile-tag" style="color:var(--zen-blue)">💸 Giờ Chi Tiền Đắc Lộc</div>
+        <div class="tile-time">${bestSpendH.range} (${CHI[bestSpendH.h]})</div>
+        <div class="tile-sub">${bestSpendH.walletStatus} • ${bestSpendH.moneyScore}đ</div>
       </div>
-      <div class="hl-box lock" onclick="focusHour(${worstSpendH.h})">
-        <div class="hl-label" style="color:var(--amber)">🔒 Giờ Dễ Thủng Ví / Mua Hớ</div>
-        <div class="hl-time">${worstSpendH.range} (${CHI[worstSpendH.h]})</div>
-        <div class="hl-note">${worstSpendH.walletStatus} • ${worstSpendH.moneyScore}đ</div>
+      <div class="zen-tile t-gold" onclick="jumpToHour(${worstSpendH.h})">
+        <div class="tile-tag" style="color:var(--zen-gold)">🔒 Giờ Nên Gìn Giữ Ví</div>
+        <div class="tile-time">${worstSpendH.range} (${CHI[worstSpendH.h]})</div>
+        <div class="tile-sub">${worstSpendH.walletStatus} • ${worstSpendH.moneyScore}đ</div>
       </div>
     </div>
   `;
 }
 
 function renderBars() {
-  document.getElementById("barsWrap").innerHTML = APP_DATA.map(item => {
+  document.getElementById("barsGrid").innerHTML = APP_DATA.map(item => {
     let wIcon = item.walletType === "spend" ? "💸" : (item.walletType === "lock" ? "🔒" : "");
     return `
-      <div class="bar-col ${item.h === ACTIVE_HOUR ? 'active' : ''}" onclick="focusHour(${item.h})">
-        ${item.isNow ? '<span class="now-dot" title="Giờ hiện tại"></span>' : ''}
-        <span class="bar-score">${item.score}</span>
-        <div class="bar-fill" style="height:${item.score}%; background:${item.barColor}"></div>
-        <span class="bar-lbl">${CHI[item.h]}<br>${item.short} ${wIcon}</span>
+      <div class="b-col ${item.h === ACTIVE_HOUR ? 'active' : ''}" onclick="jumpToHour(${item.h})">
+        ${item.isNow ? '<span class="now-indicator" title="Hiện tại"></span>' : ''}
+        <span class="b-score">${item.score}</span>
+        <div class="b-stem" style="height:${item.score}%; background:${item.barColor}"></div>
+        <span class="b-label">${CHI[item.h]}<br>${item.short} ${wIcon}</span>
       </div>
     `;
   }).join("");
@@ -778,53 +769,53 @@ function renderCards() {
   if (CURRENT_FILTER === "lock") list = APP_DATA.filter(x => x.walletType === "lock");
   if (CURRENT_FILTER === "good") list = APP_DATA.filter(x => x.score >= 60);
 
-  document.getElementById("hourList").innerHTML = list.map(item => `
-    <div class="h-card ${item.h === ACTIVE_HOUR ? 'focused' : ''}" id="hcard-${item.h}" onclick="selectCardOnly(${item.h})">
-      <div class="hc-top">
+  document.getElementById("timelineStack").innerHTML = list.map(item => `
+    <div class="zen-card ${item.h === ACTIVE_HOUR ? 'focused' : ''}" id="zcard-${item.h}" onclick="focusCard(${item.h})">
+      <div class="card-top">
         <div>
-          <div class="hc-time">
+          <div class="card-time">
             <span>${item.range}</span>
-            <span style="color:var(--text-sub); font-weight:500;">(Giờ ${item.canChi})</span>
-            ${item.isNow ? '<span class="badge-now">HIỆN TẠI</span>' : ''}
+            <span style="color:var(--text-muted); font-size:0.92rem; font-weight:500;">(Giờ ${item.canChi})</span>
+            ${item.isNow ? '<span class="badge-live-now">HIỆN TẠI</span>' : ''}
           </div>
-          <div class="hc-sub">Trọng tâm: <b>${item.domain}</b></div>
+          <div class="card-target">Khí vận: <b>${item.domain}</b></div>
         </div>
-        <div class="status-pill ${item.statusClass}">${item.statusLabel} • ${item.score}đ</div>
+        <div class="card-verdict-pill ${item.statusClass}">${item.statusLabel} • ${item.score}đ</div>
       </div>
 
-      <!-- Khung Radar Túi Tiền -->
-      <div class="wallet-banner ${item.walletClass}">
+      <!-- Khung radar tài khí -->
+      <div class="wallet-box ${item.walletClass}">
         <div>
-          <span style="font-weight:700; color:#fff;">💸 Túi tiền (${item.moneyScore}đ):</span>
-          <span style="color:#e2e8f0;">${item.walletAdvice}</span>
+          <span style="font-weight:700; color:#2c2520;">💸 Túi tiền (${item.moneyScore}đ):</span>
+          <span style="color:#4a4239;">${item.walletAdvice}</span>
         </div>
-        <span class="wb-tag" style="${item.walletTagBg}">${item.walletStatus}</span>
+        <span class="w-tag ${item.walletTagClass}">${item.walletStatus}</span>
       </div>
 
-      <div class="hc-vibe">${item.vibeSentence}</div>
+      <div class="card-vibe">${item.vibeSentence}</div>
 
-      <div class="insight-list">
+      <div class="lines-list">
         ${item.positives.map(p => `
-          <div class="ins-row">
-            <span class="ins-icon">🌱</span>
-            <div><span class="ins-label lbl-good">Điểm sáng:</span>${p}</div>
+          <div class="line-row">
+            <span class="line-icon">🌱</span>
+            <div><span class="line-title t-gr">Điểm lành:</span>${p}</div>
           </div>
         `).join("")}
 
         ${item.variables.map(v => `
-          <div class="ins-row">
-            <span class="ins-icon">⚡</span>
-            <div><span class="ins-label lbl-var">Biến số chú ý:</span>${v}</div>
+          <div class="line-row">
+            <span class="line-icon">🍃</span>
+            <div><span class="line-title t-go">Lưu tâm:</span>${v}</div>
           </div>
         `).join("")}
 
-        <div class="ins-row">
-          <span class="ins-icon">🧭</span>
-          <div><span class="ins-label lbl-tip">Gợi ý nhịp sống:</span>${item.advice}</div>
+        <div class="line-row">
+          <span class="line-icon">🧭</span>
+          <div><span class="line-title t-bl">Gợi ý nhịp sống:</span>${item.advice}</div>
         </div>
       </div>
 
-      <div class="tech-footer">
+      <div class="card-foot">
         <span>Cung Lưu Thời: ${item.cungName} (${item.mainStars})</span>
         <span>Thập thần: ${item.tenGodName}${item.isKhongVong ? ' • Giờ Không Vong' : ''}</span>
       </div>
@@ -832,54 +823,54 @@ function renderCards() {
   `).join("");
 }
 
-function selectCardOnly(hIdx) {
+function focusCard(hIdx) {
   ACTIVE_HOUR = hIdx;
   renderBars();
-  document.querySelectorAll(".h-card").forEach(el => el.classList.remove("focused"));
-  let target = document.getElementById(`hcard-${hIdx}`);
+  document.querySelectorAll(".zen-card").forEach(el => el.classList.remove("focused"));
+  let target = document.getElementById(`zcard-${hIdx}`);
   if (target) target.classList.add("focused");
 }
 
-function focusHour(hIdx) {
+function jumpToHour(hIdx) {
   ACTIVE_HOUR = hIdx;
   if (CURRENT_FILTER !== "all") {
     CURRENT_FILTER = "all";
-    document.querySelectorAll(".f-pill").forEach((b, i) => b.classList.toggle("active", i === 0));
+    document.querySelectorAll(".zen-f-btn").forEach((b, i) => b.classList.toggle("active", i === 0));
   }
   renderBars();
   renderCards();
-  let el = document.getElementById(`hcard-${hIdx}`);
+  let el = document.getElementById(`zcard-${hIdx}`);
   if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
-function setFilter(type, btn) {
+function applyFilter(type, btn) {
   CURRENT_FILTER = type;
-  document.querySelectorAll(".f-pill").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".zen-f-btn").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
   renderCards();
 }
 
-function shiftDay(delta) {
+function adjustDay(delta) {
   let inp = document.getElementById("targetDate");
   let d = new Date(inp.value + "T00:00:00");
   d.setDate(d.getDate() + delta);
   inp.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-  runApp();
+  bootApp();
 }
 
-function setToday() {
+function goToday() {
   let now = new Date();
   document.getElementById("targetDate").value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   ACTIVE_HOUR = getNowHourIdx();
-  runApp();
+  bootApp();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  let sbDate = localStorage.getItem("v4_birthDate");
-  let sbHour = localStorage.getItem("v4_birthHour");
+  let sbDate = localStorage.getItem("zen_birthDate");
+  let sbHour = localStorage.getItem("zen_birthHour");
   if (sbDate) document.getElementById("birthDate").value = sbDate;
   if (sbHour !== null) document.getElementById("birthHour").value = sbHour;
-  setToday();
+  goToday();
 });
 </script>
 </body>
